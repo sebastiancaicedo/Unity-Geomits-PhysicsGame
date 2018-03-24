@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Cannon : MonoBehaviour {
 
-    public Geomit bulletPrefab;
+    public GeomitProjectile bulletPrefab;
     [SerializeField]
     Transform pivot;
     [SerializeField]
@@ -48,7 +48,7 @@ public class Cannon : MonoBehaviour {
     private void Fire(int force)
     {
         //smokeParticles.Play();
-        Geomit bullet = Instantiate(bulletPrefab, muzzle.position, muzzle.rotation);
+        GeomitProjectile bullet = Instantiate(bulletPrefab, muzzle.position, muzzle.rotation);
         //bullet.PlaySound(shootSound);//Lo sonamos desde la bala porque cada bala es una instancia diferencte con su propio audioSource
         bullet._Rigidbody.AddForce(muzzle.right * force, ForceMode2D.Impulse);
     }

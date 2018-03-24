@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Geomit : MonoBehaviour {
+public class GeomitProjectile : MonoBehaviour {
 
     Rigidbody2D rb;
 
