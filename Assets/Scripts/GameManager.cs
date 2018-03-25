@@ -5,8 +5,13 @@ using UnityEngine;
 public class GameManager : MonoBehaviour {
 
 	public static GameManager Instance { get; private set; }
+    public static GameProgressInfo GameProgress { get; set; }
 
-    public float levelGravity = 9.81f;
+    public int selectedWorld;
+    public int selectedLevel;
+    public LevelInfo levelInfo;
+
+    private bool gameStarted;
 
     CameraController camController;
     Cannon cannon;
@@ -27,12 +32,14 @@ public class GameManager : MonoBehaviour {
 
     private void Start()
     {
-        camController.Target = cannon.transform;
+        //camController.Target = cannon.transform;
     }
 
     private void FixedUpdate()
     {
-        Physics2D.gravity = new Vector2(0, -levelGravity);
+        if (!gameStarted) return;
+
+        Physics2D.gravity = new Vector2(0, levelInfo.Gravity);
     }
 
     public void ShootGeomit(int angle, int force)
