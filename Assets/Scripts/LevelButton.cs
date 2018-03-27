@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class LevelButton : MonoBehaviour, IPointerClickHandler
 {
@@ -26,7 +27,6 @@ public class LevelButton : MonoBehaviour, IPointerClickHandler
 
     private void Start()
     {
-        print("hola");
         int world = GameManager.Instance.selectedWorld;
         if(LevelIndex > GameManager.GameProgress.worldsProgress[world])
         {
@@ -41,5 +41,7 @@ public class LevelButton : MonoBehaviour, IPointerClickHandler
 
         GameManager.Instance.selectedLevel = levelIndex;
         GameManager.Instance.levelInfo = levelInfo;
+        DontDestroyOnLoad(GameManager.Instance.gameObject);
+        SceneManager.LoadScene("Game");
     }
 }

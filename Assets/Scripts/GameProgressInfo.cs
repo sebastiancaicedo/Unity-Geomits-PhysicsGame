@@ -15,7 +15,6 @@ public class GameProgressInfo {
         {
             worldsProgress[world] = 1;
         }
-        worldsProgress[2] = 3;
     }
 
     private void SaveGameProgress()

@@ -2,16 +2,47 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public struct Limits
+{
+    public float minValue;
+    public float maxValue;
+
+    public Limits(float min, float max)
+    {
+        minValue = min;
+        maxValue = max;
+    }
+
+    public override string ToString()
+    {
+        return string.Format("Min: {0} - Max: {1}", minValue, maxValue);
+    }
+}
+
 public class CameraController : MonoBehaviour {
 
-	public Transform Target { get; set; }
+    [SerializeField]
+    [Range(1, 20)]
+    private float speed = 10;
 
-    public Vector3 offset;
+    private Limits horizontalLimits;
+    private Limits verticalLimits;
 
     private void Update()
     {
-        if (!Target) return;
+        transform.Translate(transform.right * Input.GetAxisRaw("Horizontal") * speed * Time.deltaTime + transform.up * Input.GetAxisRaw("Vertical") * speed * Time.deltaTime);
 
-        transform.position = Vector3.Lerp(transform.position, Target.position + (Vector3.forward * transform.position.z) + offset, 1);
+        Vector3 clampedPos = transform.position;
+        clampedPos.x = Mathf.Clamp(clampedPos.x, horizontalLimits.minValue, horizontalLimits.maxValue);
+        clampedPos.y = Mathf.Clamp(clampedPos.y, verticalLimits.minValue, verticalLimits.maxValue);
+
+        transform.position = clampedPos;
+    }
+
+    public void SetCameraLimits(Limits hLimits, Limits vLimits)
+    {
+        horizontalLimits = hLimits;
+        verticalLimits = vLimits;
     }
 }

@@ -8,11 +8,36 @@ public class GameUIController : MonoBehaviour {
     public static GameUIController Instance { get; private set; }
 
     [SerializeField]
+    Text levelGravityText;
+    [Header("Inputs Menu")]
+    [SerializeField]
     RectTransform inputsMenu;
     [SerializeField]
     InputField inputfieldAngle;
     [SerializeField]
     InputField inputfieldForce;
+    [Header("Top Panel Text Indicators")]
+    [SerializeField]
+    Text projectilesText;
+    [SerializeField]
+    Text geomitsText;
+    [SerializeField]
+    Text diamondStarsText;
+    [SerializeField]
+    Text goldStarsText;
+    [SerializeField]
+    Text diamondCoinsText;
+    [SerializeField]
+    Text goldCoinsText;
+    [Header("Next Projectile Info")]
+    [SerializeField]
+    GameObject projetileInfoPanel;
+    [SerializeField]
+    Image projectileImage;
+    [SerializeField]
+    Text projectileNameText;
+    [SerializeField]
+    Text projectileMassText;
 
     public string AngleInput { get { return inputfieldAngle.text; } }
     public string ForceInput { get { return inputfieldForce.text; } }
@@ -60,6 +85,39 @@ public class GameUIController : MonoBehaviour {
         }
     }
 
+    public void SetLevelGravityText(float levelGravity)
+    {
+        levelGravityText.text = string.Format("Gravity: {0} m/s2", Mathf.Abs(levelGravity));
+    }
 
+    public void SetDiamondStarsText(int diamondStars)
+    {
+        diamondStarsText.text = diamondStars.ToString();
+    }
+
+    public void SetGoldStarsText(int goldStars)
+    {
+        goldStarsText.text = goldStars.ToString();
+    }
+
+    public void SetDiamondCoinsText(int diamondCoins)
+    {
+        diamondCoinsText.text = diamondCoins.ToString();
+    }
+
+    public void SetGoldCoinsText(int goldCoins)
+    {
+        goldCoinsText.text = goldCoins.ToString();
+    }
+
+    public void SetProjectilesLeftText(int projectiles)
+    {
+        projectilesText.text = projectiles.ToString();
+    }
+
+    public void SetGeomitsLeftsText(int geomits)
+    {
+        geomitsText.text = geomits.ToString();
+    }
 
 }

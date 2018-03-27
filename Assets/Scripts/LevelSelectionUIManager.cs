@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class LevelSelectionUIManager : MonoBehaviour {
 
@@ -10,11 +11,17 @@ public class LevelSelectionUIManager : MonoBehaviour {
     [SerializeField]
     GameObject worldsPanel;
     [SerializeField]
-    GameObject levelsPanel;
+    GameObject[] levelsPanel;
+
+    private Dictionary<int, GameObject> levelsPanelsByWorld = new Dictionary<int, GameObject>();
 
     private void Awake()
     {
-        levelsPanel.SetActive(false);
+        for (int world = 1; world <= levelsPanel.Length; world++)
+        {
+            levelsPanelsByWorld.Add(world, levelsPanel[world - 1]);
+            levelsPanel[world - 1].SetActive(false);
+        }
         worldsPanel.SetActive(true);
     }
 
@@ -28,21 +35,37 @@ public class LevelSelectionUIManager : MonoBehaviour {
         GameManager.Instance.selectedWorld = worldIndex;
         worldsPanel.SetActive(false);
         titleText.text = "Level Selection";
-        levelsPanel.SetActive(true);
+        levelsPanelsByWorld[worldIndex].SetActive(true);
     }
 
     public void OnBackButonClick()
     {
-        if (levelsPanel.activeInHierarchy)
+        GameObject activePanel;
+        if (IsAnyLevelsPanelActive(out activePanel))
         {
-            levelsPanel.SetActive(false);
-            worldsPanel.SetActive(true);
             GameManager.Instance.selectedLevel = 0;
+            activePanel.SetActive(false);
+            titleText.text = "World Selection";
+            worldsPanel.SetActive(true);
         }
         else
             if (worldsPanel.activeInHierarchy)
         {
-            //Se carga la scena main
+            SceneManager.LoadScene("MainMenu");
         }
+    }
+
+    private bool IsAnyLevelsPanelActive(out GameObject activePanel)
+    {
+        for (int world = 1; world <= levelsPanelsByWorld.Count; world++)
+        {
+            if (levelsPanelsByWorld[world].activeInHierarchy)
+            {
+                activePanel = levelsPanelsByWorld[world];
+                return true;
+            }
+        }
+        activePanel = null;
+        return false;
     }
 }
