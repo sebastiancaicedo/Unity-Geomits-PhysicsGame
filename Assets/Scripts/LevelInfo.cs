@@ -17,6 +17,8 @@ public class LevelInfo : ScriptableObject {
     Limits cameraHztalLimits;
     [SerializeField]
     Limits cameraVrtcalLimits;
+    [SerializeField]
+    LevelInfo nextLevelInfo;
 
     public GameObject Scenario { get { return scenario; } }
     public float Gravity { get { return gravity; } }
@@ -24,6 +26,7 @@ public class LevelInfo : ScriptableObject {
     public float[] ProjectilesMass { get { return projectilesMass; } }
     public Limits CamHztalLimits { get { return cameraHztalLimits; } }
     public Limits CamVrtcalLimits { get { return cameraVrtcalLimits; } }
+    public LevelInfo NextLevelInfo { get { return nextLevelInfo; } }
 
 	
 }

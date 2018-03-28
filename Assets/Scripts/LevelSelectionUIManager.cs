@@ -25,11 +25,6 @@ public class LevelSelectionUIManager : MonoBehaviour {
         worldsPanel.SetActive(true);
     }
 
-    private void Start()
-    {
-        GameManager.GameProgress = new GameProgressInfo();
-    }
-
     public void OnWorldButtonClick(int worldIndex)
     {
         GameManager.Instance.selectedWorld = worldIndex;
@@ -51,8 +46,15 @@ public class LevelSelectionUIManager : MonoBehaviour {
         else
             if (worldsPanel.activeInHierarchy)
         {
+            Destroy(GameManager.Instance.gameObject);
             SceneManager.LoadScene("MainMenu");
         }
+    }
+
+    public void OnStoreButtonClick()
+    {
+        Destroy(GameManager.Instance.gameObject);
+        SceneManager.LoadScene("Store");
     }
 
     private bool IsAnyLevelsPanelActive(out GameObject activePanel)

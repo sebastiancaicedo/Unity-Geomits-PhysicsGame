@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour {
 
     public static GameManager Instance { get; private set; }
-    public static GameProgressInfo GameProgress { get; set; }
 
     public int selectedWorld;
     public int selectedLevel;
@@ -22,6 +21,9 @@ public class GameManager : MonoBehaviour {
     private int diamondCoinsPicked;
     private int goldStarsPicked;
     private int diamondStarsPicked;
+    private GeomitProjectile[] levelProjectiles;
+    private GeomitProjectile nextProjectile;
+    private int nextProjectileIndex;
 
     #region Properties
 
@@ -61,6 +63,12 @@ public class GameManager : MonoBehaviour {
         set { diamondStarsPicked = value; GameUIController.Instance.SetDiamondStarsText(value); }
     }
 
+    public GeomitProjectile NextProjectile
+    {
+        get { return nextProjectile; }
+        set { nextProjectile = value; GameUIController.Instance.SetNextProjectileInfo(value); }
+    }
+
     #endregion Properties
 
     private void Awake()
@@ -80,12 +88,23 @@ public class GameManager : MonoBehaviour {
         SceneManager.sceneLoaded += OnSceneLoad;
     }
 
+    private void OnDestroy()
+    {
+        if (Instance == this)
+            Instance = null;
+    }
+
     private void OnSceneLoad(Scene scene, LoadSceneMode mode)
     {
         if (scene.name == "Game")
         {
+            inGameScene = false;
             InitGame();
             inGameScene = true;
+        }
+        if(scene.name == "MainMenu" || scene.name == "Shop")
+        {
+            SceneManager.sceneLoaded -= OnSceneLoad;
         }
     }
 
@@ -103,10 +122,22 @@ public class GameManager : MonoBehaviour {
 
     private void InitGame()
     {
+        GameUIController.Instance.ShowShootingPanels(false);
         Instantiate(levelInfo.Scenario);
         cannon = FindObjectOfType<Cannon>();
         camController = Camera.main.GetComponent<CameraController>();
         camController.SetCameraLimits(levelInfo.CamHztalLimits, levelInfo.CamVrtcalLimits);
+
+        //Load level projectiles
+        levelProjectiles = new GeomitProjectile[levelInfo.ProjectilesCount];
+        for (int index = 0; index < levelInfo.ProjectilesCount; index++)
+        {
+            GeomitProjectile prefab = PrefabsLibrary.Instance.GetAvailableRandomProjectile();
+            levelProjectiles[index] = Instantiate(prefab, new Vector3(100, 10, -20), Quaternion.identity);
+            levelProjectiles[index].Rigidbody_.simulated = false;
+            levelProjectiles[index].gameObject.name = prefab.name;
+            levelProjectiles[index].Rigidbody_.mass = levelInfo.ProjectilesMass[index];
+        }
 
         GameUIController.Instance.SetLevelGravityText(levelInfo.Gravity);
         ProjectilesLeft = levelInfo.ProjectilesCount;
@@ -116,10 +147,48 @@ public class GameManager : MonoBehaviour {
         GoldStarsPicked = 0;
         DiamondStarsPicked = 0;
 
+        nextProjectileIndex = 0;
+        NextProjectile = levelProjectiles[nextProjectileIndex];
+
+        GameUIController.Instance.ShowShootingPanels();
     }
 
     public void ShootGeomit(int angle, int force)
     {
-        cannon.Shoot(angle, force);
+        GameUIController.Instance.ShowShootingPanels(false);
+        cannon.Shoot(NextProjectile, angle, force);
+    }
+
+    public void EndShoot()
+    {
+        if (GeomitsToPickLeft == 0)
+        {
+            //Game Completed
+            GameProgress.Instance.PlayerProgress.worldsProgress[selectedWorld] = selectedLevel + 1;
+            GameProgress.Instance.PlayerProgress.goldCoins += GoldCoinsPicked;
+            GameProgress.Instance.PlayerProgress.diamondCoins += DiamondCoinsPicked;
+            GameProgress.Instance.PlayerProgress.goldStars += GoldStarsPicked;
+            GameProgress.Instance.PlayerProgress.diamondStars += DiamondStarsPicked;
+
+            GameUIController.Instance.ShowWinPanel(levelInfo.NextLevelInfo);
+
+            GameProgress.Instance.SaveProgress();
+
+        }
+        else
+        {
+            ProjectilesLeft--;
+            if (ProjectilesLeft > 0)
+            {
+                nextProjectileIndex++;
+                NextProjectile = levelProjectiles[nextProjectileIndex];
+                GameUIController.Instance.ShowShootingPanels();
+            }
+            else
+            {
+                GameUIController.Instance.ShowLosePanel();
+                //Perdio
+            }
+        }
     }
 }

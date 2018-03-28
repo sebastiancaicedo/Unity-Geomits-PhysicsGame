@@ -10,7 +10,16 @@ public class Coin : Collectable
 
     public override void Collect(Collider2D other)
     {
-        print("Coin collected " + type);
+        
+        switch (type)
+        {
+            case CollectableType.Gold:
+                GameManager.Instance.GoldCoinsPicked++;
+                break;
+            case CollectableType.Diamond:
+                GameManager.Instance.DiamondCoinsPicked++;
+                break;
+        }
         Destroy(gameObject);
     }
 }

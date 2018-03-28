@@ -38,6 +38,19 @@ public class GameUIController : MonoBehaviour {
     Text projectileNameText;
     [SerializeField]
     Text projectileMassText;
+    [Header("Sub Menus")]
+    [SerializeField]
+    GameObject loseMenu;
+    [SerializeField]
+    Text tipText;
+    [SerializeField]
+    GameObject winMenu;
+    [SerializeField]
+    Button nextLevelButton;
+    [SerializeField]
+    GameObject pauseMenu;
+
+    private LevelInfo nextLevelInfo;
 
     public string AngleInput { get { return inputfieldAngle.text; } }
     public string ForceInput { get { return inputfieldForce.text; } }
@@ -58,6 +71,9 @@ public class GameUIController : MonoBehaviour {
     {
         inputfieldForce.onValueChanged.AddListener(delegate { ValidateNoNegative(inputfieldForce); });
         inputfieldAngle.onValueChanged.AddListener(delegate { ValidateNoNegative(inputfieldAngle); });
+        loseMenu.SetActive(false);
+        winMenu.SetActive(false);
+        pauseMenu.SetActive(false);
     }
 
     /// <summary>
@@ -85,39 +101,116 @@ public class GameUIController : MonoBehaviour {
         }
     }
 
+    public void OnPauseButtonClick()
+    {
+        pauseMenu.SetActive(true);
+    }
+
+    public void OnContinueButtonClick()
+    {
+        pauseMenu.SetActive(false);
+    }
+
+    public void OnRetryButtonClick()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
+    }
+
+    public void OnExitButtonClick()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("LevelSelection");
+    }
+
+    public void OnNextButtonClick()
+    {
+        if (nextLevelInfo)
+        {
+            GameManager.Instance.selectedLevel++;
+            GameManager.Instance.levelInfo = nextLevelInfo;
+            UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
+        }
+    }
+
+    public void ShowShootingPanels(bool show = true)
+    {
+        if (inputsMenu && projetileInfoPanel)
+        {
+            inputsMenu.gameObject.SetActive(show);
+            projetileInfoPanel.SetActive(show);
+        }
+    }
+
     public void SetLevelGravityText(float levelGravity)
     {
-        levelGravityText.text = string.Format("Gravity: {0} m/s2", Mathf.Abs(levelGravity));
+        if(levelGravityText)
+            levelGravityText.text = string.Format("Gravity: {0} m/s2", Mathf.Abs(levelGravity));
     }
 
     public void SetDiamondStarsText(int diamondStars)
     {
-        diamondStarsText.text = diamondStars.ToString();
+        if (diamondStarsText)
+            diamondStarsText.text = diamondStars.ToString();
     }
 
     public void SetGoldStarsText(int goldStars)
     {
-        goldStarsText.text = goldStars.ToString();
+        if(goldStarsText)
+            goldStarsText.text = goldStars.ToString();
     }
 
     public void SetDiamondCoinsText(int diamondCoins)
     {
-        diamondCoinsText.text = diamondCoins.ToString();
+        if(diamondCoinsText)
+            diamondCoinsText.text = diamondCoins.ToString();
     }
 
     public void SetGoldCoinsText(int goldCoins)
     {
-        goldCoinsText.text = goldCoins.ToString();
+        if(goldCoinsText)
+            goldCoinsText.text = goldCoins.ToString();
     }
 
     public void SetProjectilesLeftText(int projectiles)
     {
-        projectilesText.text = projectiles.ToString();
+        if(projectilesText)
+            projectilesText.text = projectiles.ToString();
     }
 
     public void SetGeomitsLeftsText(int geomits)
     {
-        geomitsText.text = geomits.ToString();
+        if(geomitsText)
+            geomitsText.text = geomits.ToString();
+    }
+
+    public void SetNextProjectileInfo(GeomitProjectile projectile)
+    {
+        if (projectileNameText && projectile)
+        {
+            projectileNameText.text = projectile.gameObject.name;
+            projectileImage.sprite = projectile.Sprite_;
+            projectileMassText.text = string.Format("Mass: {0} Kg", projectile.Rigidbody_.mass);
+        }
+    }
+
+    public void ShowWinPanel(LevelInfo nextLevelInfo, bool show = true)
+    {
+        if (winMenu)
+        {
+            if (nextLevelInfo == null) nextLevelButton.interactable = false;
+            this.nextLevelInfo = nextLevelInfo;
+            winMenu.SetActive(show);
+        }
+    }
+
+    public void ShowLosePanel(bool show = true)
+    {
+        if (loseMenu)
+        {
+            loseMenu.SetActive(show);
+            if(show)
+                if(tipText)
+                    tipText.text = "Se obtiene un nuvo tip";
+        }
     }
 
 }

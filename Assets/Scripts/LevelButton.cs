@@ -27,8 +27,8 @@ public class LevelButton : MonoBehaviour, IPointerClickHandler
 
     private void Start()
     {
-        int world = GameManager.Instance.selectedWorld;
-        if(LevelIndex > GameManager.GameProgress.worldsProgress[world])
+        int world = GameManager.Instance.selectedWorld;        
+        if(LevelIndex > GameProgress.Instance.PlayerProgress.worldsProgress[world])
         {
             button.interactable = false;
         }

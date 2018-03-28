@@ -6,7 +6,7 @@ public class Geomit : Collectable {
 
     public override void Collect(Collider2D other)
     {
-        print("Collected");
+        GameManager.Instance.GeomitsToPickLeft--;
         Destroy(gameObject);
     }
 }

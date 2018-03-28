@@ -26,7 +26,7 @@ public class Graviton : MonoBehaviour {
             Rigidbody2D elem = objectsToAffect[index];
             int forceSign = forceType == GravitonForceType.Attraction ? -1 : 1;
             Vector2 forceDirection = (elem.transform.position - transform.position).normalized * forceSign;
-            elem.AddForce(forceDirection * force);
+            elem.AddForce(forceDirection * force * (elem.mass / 2));
 
         }
     }

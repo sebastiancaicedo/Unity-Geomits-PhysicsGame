@@ -4,18 +4,17 @@ using UnityEngine;
 
 public class Cannon : MonoBehaviour {
 
-    public GeomitProjectile bulletPrefab;
     [SerializeField]
     Transform pivot;
     [SerializeField]
     Transform muzzle;
 
-    public void Shoot(int angle, int force)
+    public void Shoot(GeomitProjectile projectile, int angle, int force)
     {
-        StartCoroutine(AimAndFire(angle, force));
+        StartCoroutine(AimAndFire(projectile, angle, force));
     }
 
-    private IEnumerator AimAndFire(int angle, int force)
+    private IEnumerator AimAndFire(GeomitProjectile projectile, int angle, int force)
     {
         yield return null;
         //Manejo de camara
@@ -41,15 +40,18 @@ public class Cannon : MonoBehaviour {
         //audioSource.loop = false;
         yield return new WaitForSeconds(0.3f);
 
-        Fire(force);
+        Fire(projectile, force);
         yield return new WaitForEndOfFrame();
     }
 
-    private void Fire(int force)
+    private void Fire(GeomitProjectile projectile, int force)
     {
         //smokeParticles.Play();
-        GeomitProjectile bullet = Instantiate(bulletPrefab, muzzle.position, muzzle.rotation);
+        projectile.transform.position = muzzle.position;
+        projectile.Rigidbody_.simulated = true;
+        projectile.Rigidbody_.velocity = Vector2.zero;
         //bullet.PlaySound(shootSound);//Lo sonamos desde la bala porque cada bala es una instancia diferencte con su propio audioSource
-        bullet._Rigidbody.AddForce(muzzle.right * force, ForceMode2D.Impulse);
+        projectile.Rigidbody_.AddForce(muzzle.right * force, ForceMode2D.Impulse);
+        projectile.isBeenShooted = true;
     }
 }

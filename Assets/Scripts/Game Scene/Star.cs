@@ -16,7 +16,15 @@ public class Star : Collectable
 
     public override void Collect(Collider2D other)
     {
-        print("Star Colected: " + type);
+        switch (type)
+        {
+            case CollectableType.Gold:
+                GameManager.Instance.GoldStarsPicked++;
+                break;
+            case CollectableType.Diamond:
+                GameManager.Instance.DiamondStarsPicked++;
+                break;
+        }
         Destroy(gameObject);
     }
 }
