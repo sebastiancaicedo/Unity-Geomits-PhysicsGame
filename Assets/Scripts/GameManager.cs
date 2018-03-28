@@ -113,11 +113,6 @@ public class GameManager : MonoBehaviour {
         if (!inGameScene) return;
 
         Physics2D.gravity = new Vector2(0, levelInfo.Gravity);
-
-        if(Input.GetKeyDown(KeyCode.Z))
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
     }
 
     private void InitGame()

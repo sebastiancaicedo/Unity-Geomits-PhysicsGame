@@ -19,18 +19,16 @@ public class GameProgress : MonoBehaviour
     {
         if (!Instance)
         {
+            //PlayerPrefs.DeleteAll();
             Instance = this;
+            LoadProgress();
+            //SaveProgress();
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
-    }
-
-    private void Start()
-    {
-        LoadProgress();
-        DontDestroyOnLoad(gameObject);
     }
 
     public void LoadProgress()
@@ -51,10 +49,10 @@ public class GameProgress : MonoBehaviour
 
         public Dictionary<int, int> worldsProgress = new Dictionary<int, int>();
         public List<string> projectilesOwned = new List<string>();
-        public int goldCoins = 0;
-        public int diamondCoins = 0;
-        public int goldStars = 0;
-        public int diamondStars = 0;
+        public int goldCoins = 100;
+        public int diamondCoins = 30;
+        public int goldStars = 5;
+        public int diamondStars = 2;
 
         public void Load(string[] geomitsNames)
         {
