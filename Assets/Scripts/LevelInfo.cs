@@ -14,9 +14,9 @@ public class LevelInfo : ScriptableObject {
     [SerializeField]
     float[] projectilesMass;
     [SerializeField]
-    Limits cameraHztalLimits;
+    Limits cameraHztalLimits = Limits.defaultCameraHztalLimits;
     [SerializeField]
-    Limits cameraVrtcalLimits;
+    Limits cameraVrtcalLimits = Limits.defaultCameraVrtcalLimits;
     [SerializeField]
     LevelInfo nextLevelInfo;
 

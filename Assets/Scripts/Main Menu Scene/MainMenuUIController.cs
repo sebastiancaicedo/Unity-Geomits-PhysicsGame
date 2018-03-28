@@ -9,4 +9,14 @@ public class MainMenuUIController : MonoBehaviour {
     {
         SceneManager.LoadScene("LevelSelection");
     }
+
+    public void OnStoreButtonClick()
+    {
+        SceneManager.LoadScene("Store");
+    }
+
+    public void OnExitButtonClick()
+    {
+        Application.Quit();
+    }
 }

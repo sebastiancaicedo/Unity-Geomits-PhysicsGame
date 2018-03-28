@@ -14,6 +14,9 @@ public struct Limits
         maxValue = max;
     }
 
+    public static Limits defaultCameraVrtcalLimits = new Limits(5, 9.2f);
+    public static Limits defaultCameraHztalLimits = new Limits(5, 0);
+
     public override string ToString()
     {
         return string.Format("Min: {0} - Max: {1}", minValue, maxValue);

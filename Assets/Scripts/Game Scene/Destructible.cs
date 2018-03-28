@@ -5,6 +5,8 @@ using UnityEngine;
 public class Destructible : MonoBehaviour {
 
     [SerializeField]
+    float minDamageSpeed;
+    [SerializeField]
     protected Sprite[] states;
 
     protected int hits;
@@ -39,7 +41,7 @@ public class Destructible : MonoBehaviour {
     {
 
 
-        if (collision.relativeVelocity.magnitude > 3)
+        if (collision.relativeVelocity.magnitude > minDamageSpeed)
         {             
             print(collision.relativeVelocity.magnitude);
             TakeDamage();
