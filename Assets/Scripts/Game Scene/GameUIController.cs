@@ -202,14 +202,14 @@ public class GameUIController : MonoBehaviour {
         }
     }
 
-    public void ShowLosePanel(bool show = true)
+    public void ShowLosePanel(string loseMessaje, bool show = true)
     {
         if (loseMenu)
         {
             loseMenu.SetActive(show);
-            if(show)
-                if(tipText)
-                    tipText.text = "Se obtiene un nuvo tip";
+            if (show)
+                if (tipText)
+                    tipText.text = string.Format("Level Failed: {0}\nTip: Aqui Va el tip", loseMessaje);
         }
     }
 

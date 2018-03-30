@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public enum FailCause
+{
+    OutOfProjectiles,
+    GeomitFallen
+}
+
 public class GameManager : MonoBehaviour {
 
     public static GameManager Instance { get; private set; }
@@ -15,6 +21,8 @@ public class GameManager : MonoBehaviour {
     Cannon cannon;
     private bool inGameScene;
 
+    private bool projectileShooted;
+
     private int projectilesLeft;
     private int geomitsToPickLeft;
     private int goldCoinsPicked;
@@ -24,6 +32,7 @@ public class GameManager : MonoBehaviour {
     private GeomitProjectile[] levelProjectiles;
     private GeomitProjectile nextProjectile;
     private int nextProjectileIndex;
+    private bool superSpeedUsed;
 
     #region Properties
 
@@ -108,6 +117,24 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    private void Update()
+    {
+        if (!projectileShooted) return;
+
+        if (superSpeedUsed) return;
+
+        if(Input.GetMouseButton(0))
+        {
+            superSpeedUsed = true;
+            print("Super Speed");
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mousePos.z = 0;
+            NextProjectile.SuperSpeed(mousePos);
+            print(mousePos);
+        }
+
+    }
+
     private void FixedUpdate()
     {
         if (!inGameScene) return;
@@ -152,10 +179,13 @@ public class GameManager : MonoBehaviour {
     {
         GameUIController.Instance.ShowShootingPanels(false);
         cannon.Shoot(NextProjectile, angle, force);
+        projectileShooted = true;
     }
 
     public void EndShoot()
     {
+        projectileShooted = false;
+        superSpeedUsed = false;
         if (GeomitsToPickLeft == 0)
         {
             //Game Completed
@@ -181,9 +211,25 @@ public class GameManager : MonoBehaviour {
             }
             else
             {
-                GameUIController.Instance.ShowLosePanel();
                 //Perdio
+                LevelFailed(FailCause.OutOfProjectiles);
             }
         }
+    }
+
+    public void LevelFailed(FailCause cause)
+    {
+        string message = string.Empty;
+        switch (cause)
+        {
+            case FailCause.OutOfProjectiles:
+                message = "Out of Projectiles";
+                break;
+            case FailCause.GeomitFallen:
+                message = "Geomit Fallen";
+                break;
+        }
+
+        GameUIController.Instance.ShowLosePanel(message);
     }
 }
