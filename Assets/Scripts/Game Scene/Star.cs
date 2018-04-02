@@ -14,6 +14,18 @@ public class Star : Collectable
     [SerializeField]
     CollectableType type;
 
+    Rigidbody2D rb;
+
+    public CollectableType Type { get { return type; } }
+    public Rigidbody2D Rigidbody_ { get { return rb; } }
+    public Vector2 VelocityDir { get; set; }
+
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
+
     public override void Collect(Collider2D other)
     {
         switch (type)
