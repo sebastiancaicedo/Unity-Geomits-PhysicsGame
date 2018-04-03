@@ -12,6 +12,9 @@ public class GameProgress : MonoBehaviour
     [SerializeField]
     string[] allGeomitNames;
 
+    [Header("Solo en editor, para resetar el progreso")]
+    public bool resetPlayerPrefs = false;
+
     //[HideInInspector]
     //public bool progressLoaded;
 
@@ -19,10 +22,10 @@ public class GameProgress : MonoBehaviour
     {
         if (!Instance)
         {
-            //PlayerPrefs.DeleteAll();
             Instance = this;
+            if (resetPlayerPrefs) PlayerPrefs.DeleteAll();
             LoadProgress();
-            //SaveProgress();
+            if (resetPlayerPrefs) SaveProgress();
             DontDestroyOnLoad(gameObject);
         }
         else

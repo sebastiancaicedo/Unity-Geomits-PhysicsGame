@@ -110,8 +110,9 @@ public class GameManager : MonoBehaviour {
             inGameScene = false;
             InitGame();
             inGameScene = true;
-        }
-        if(scene.name == "MainMenu" || scene.name == "Shop")
+        } 
+
+        if(scene.name == "MainMenu" || scene.name == "Store")
         {
             SceneManager.sceneLoaded -= OnSceneLoad;
         }
@@ -144,6 +145,7 @@ public class GameManager : MonoBehaviour {
 
     private void InitGame()
     {
+        print(string.Format("Init level, selected world: {0}, level: {1} GM.I: {2}", selectedWorld, selectedLevel, Instance));
         GameUIController.Instance.ShowShootingPanels(false);
         Instantiate(levelInfo.Scenario);
         cannon = FindObjectOfType<Cannon>();

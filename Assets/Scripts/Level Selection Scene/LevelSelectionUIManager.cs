@@ -25,6 +25,11 @@ public class LevelSelectionUIManager : MonoBehaviour {
         worldsPanel.SetActive(true);
     }
 
+    void Update()
+    {
+        print(GameManager.Instance.selectedWorld);
+    }
+
     public void OnWorldButtonClick(int worldIndex)
     {
         GameManager.Instance.selectedWorld = worldIndex;
