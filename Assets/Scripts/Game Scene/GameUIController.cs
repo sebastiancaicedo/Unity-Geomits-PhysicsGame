@@ -209,7 +209,7 @@ public class GameUIController : MonoBehaviour {
             loseMenu.SetActive(show);
             if (show)
                 if (tipText)
-                    tipText.text = string.Format("Level Failed: {0}\nTip: Aqui Va el tip", loseMessaje);
+                    tipText.text = string.Format("Level Failed: {0}\nTip: {1}", loseMessaje, TipsHandler.Instance.GetTip());
         }
     }
 
