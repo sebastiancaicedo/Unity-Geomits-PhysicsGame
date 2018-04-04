@@ -19,10 +19,13 @@ public class GeomitProjectile : MonoBehaviour {
     public Rigidbody2D Rigidbody_ { get; private set; }
     public Sprite Sprite_ { get; private set; }
 
+    AudioSource audioSource;
+
     private void Awake()
     {
         Rigidbody_ = GetComponent<Rigidbody2D>();
         Sprite_ = GetComponent<SpriteRenderer>().sprite;
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -69,5 +72,11 @@ public class GeomitProjectile : MonoBehaviour {
         Rigidbody_.velocity = superSpeedVelocity;
         usingSuperSpeed = true;
 
+    }
+
+    public void PlaySound(AudioClip sound)
+    {
+        audioSource.clip = sound;
+        audioSource.Play();
     }
 }

@@ -8,6 +8,17 @@ public class Cannon : MonoBehaviour {
     Transform pivot;
     [SerializeField]
     Transform muzzle;
+    [SerializeField]
+    AudioClip shootSound;
+    [SerializeField]
+    AudioClip aimSound;
+
+    AudioSource audioSource;
+
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
 
     public void Shoot(GeomitProjectile projectile, int angle, int force)
     {
@@ -25,8 +36,8 @@ public class Cannon : MonoBehaviour {
         //}
 
         //Rotacion
-        //audioSource.loop = true;
-        //PlaySound(aimSound);
+        audioSource.loop = true;
+        PlaySound(aimSound);
         angle = angle % 360;
         do
         {
@@ -36,8 +47,8 @@ public class Cannon : MonoBehaviour {
         } while (Mathf.Abs(Mathf.Abs(angle) - Mathf.Abs(pivot.localEulerAngles.z)) > 2);
 
         pivot.localEulerAngles = new Vector3(0, 0, angle);
-        //audioSource.Stop();
-        //audioSource.loop = false;
+        audioSource.Stop();
+        audioSource.loop = false;
         yield return new WaitForSeconds(0.3f);
 
         Fire(projectile, force);
@@ -50,8 +61,14 @@ public class Cannon : MonoBehaviour {
         projectile.transform.position = muzzle.position;
         projectile.Rigidbody_.simulated = true;
         projectile.Rigidbody_.velocity = Vector2.zero;
-        //bullet.PlaySound(shootSound);//Lo sonamos desde la bala porque cada bala es una instancia diferencte con su propio audioSource
+        projectile.PlaySound(shootSound);//Lo sonamos desde la bala porque cada bala es una instancia diferencte con su propio audioSource
         projectile.Rigidbody_.AddForce(muzzle.right * force, ForceMode2D.Impulse);
         projectile.isBeenShooted = true;
+    }
+
+    private void PlaySound(AudioClip sound)
+    {
+        audioSource.clip = sound;
+        audioSource.Play();
     }
 }
