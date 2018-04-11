@@ -51,18 +51,31 @@ public class Cannon : MonoBehaviour {
         audioSource.loop = false;
         yield return new WaitForSeconds(0.3f);
 
-        Fire(projectile, force);
+        //Fire(projectile, force);
+        Fire(projectile, muzzle.right * force);
         yield return new WaitForEndOfFrame();
     }
 
-    private void Fire(GeomitProjectile projectile, int force)
+    //private void Fire(GeomitProjectile projectile, int force)
+    //{
+    //    //smokeParticles.Play();
+    //    projectile.transform.position = muzzle.position;
+    //    projectile.Rigidbody_.simulated = true;
+    //    projectile.Rigidbody_.velocity = Vector2.zero;
+    //    projectile.PlaySound(shootSound);//Lo sonamos desde la bala porque cada bala es una instancia diferencte con su propio audioSource
+    //    projectile.Rigidbody_.AddForce(muzzle.right * force, ForceMode2D.Impulse);
+    //    projectile.isBeenShooted = true;
+    //}
+
+    private void Fire(GeomitProjectile projectile, Vector2 initialVelocity)
     {
         //smokeParticles.Play();
         projectile.transform.position = muzzle.position;
         projectile.Rigidbody_.simulated = true;
         projectile.Rigidbody_.velocity = Vector2.zero;
         projectile.PlaySound(shootSound);//Lo sonamos desde la bala porque cada bala es una instancia diferencte con su propio audioSource
-        projectile.Rigidbody_.AddForce(muzzle.right * force, ForceMode2D.Impulse);
+        //projectile.Rigidbody_.AddForce(muzzle.right * force, ForceMode2D.Impulse);
+        projectile.Rigidbody_.velocity = initialVelocity;
         projectile.isBeenShooted = true;
     }
 

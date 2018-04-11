@@ -19,4 +19,11 @@ public class MainMenuUIController : MonoBehaviour {
     {
         Application.Quit();
     }
+
+    public void OnResetPlayerPrefButtonClick()
+    {
+        PlayerPrefs.DeleteAll();
+        GameProgress.Instance.LoadProgress();
+        GameProgress.Instance.SaveProgress();
+    }
 }

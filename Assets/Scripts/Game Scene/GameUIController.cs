@@ -49,6 +49,13 @@ public class GameUIController : MonoBehaviour {
     Button nextLevelButton;
     [SerializeField]
     GameObject pauseMenu;
+    [Header("Rule")]
+    [SerializeField]
+    Transform rulePrefab;
+
+    private Transform rule;
+    private int ruleRotInput;
+    public bool isShowingRule;
 
     private LevelInfo nextLevelInfo;
 
@@ -74,6 +81,35 @@ public class GameUIController : MonoBehaviour {
         loseMenu.SetActive(false);
         winMenu.SetActive(false);
         pauseMenu.SetActive(false);
+        rule = Instantiate(rulePrefab);
+        rule.gameObject.SetActive(false);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            isShowingRule = !isShowingRule;
+            rule.gameObject.SetActive(isShowingRule);
+        }
+
+        if (isShowingRule)
+        {
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mousePos.z = 0;
+            rule.position = mousePos;
+
+            if (Input.GetKeyDown(KeyCode.Q))
+                ruleRotInput = -1;
+
+            if (Input.GetKeyDown(KeyCode.E))
+                ruleRotInput = 1;
+
+            if (Input.GetKeyUp(KeyCode.Q) || Input.GetKeyUp(KeyCode.E))
+                ruleRotInput = 0;
+      
+            rule.Rotate(0, 0, 45 * ruleRotInput * Time.deltaTime);
+        }
     }
 
     /// <summary>
